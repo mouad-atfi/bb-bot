@@ -1,5 +1,10 @@
 # bb-bot
 
+## TD
+Finish scanning skus
+Build profile management
+Build cookies scraping per profile
+
 ## Features
 Refreshes link until "Add to Cart" button is available
 Automate entire checkout process
