@@ -2,8 +2,12 @@
 
 ## TD
 Finish scanning skus
+
 Build profile management
+
 Build cookies scraping per profile
+
+Add event scheduler 10am-8pm
 
 ## Features
 Refreshes link until "Add to Cart" button is available
