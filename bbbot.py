@@ -7,7 +7,8 @@ import json
 import os
 import time
 import sys
-import random
+import pickle
+from requests_toolbelt.utils import dump
 
 PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 
@@ -17,23 +18,66 @@ user_agent_list = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.72 Safari/537.36"]
 
 proxies = []
-
 with open('./socks.txt') as f:
         proxies = f.read().splitlines()
+profiles = {'mouad.atfi@gmail.com': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":',
+           '': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":'}
+cart_profile = []
+totalprice = []
 
+def checkout(profiles, sku):
+      for email, param in profiles.items():   
+            s = requests.session() 
+            with open(email, 'rb') as f:
+                  s.cookies.update(pickle.load(f))
+            #token = s.cookies['x-tx']       
+            #url = "https://www.bestbuy.ca/api/checkout/checkout/orders/submit"
+            url = "test.com"
+            
+            s.headers.update({'referer': 'https://www.bestbuy.ca/checkout/?qit=1'})
+            
+            data = '{}{}}}'.format(param, price)
+            req = s.post(url, data=data)
+            
+            prepped = s.prepare_request(req)
+            print("Sending request:")
+            print(format_prepped_request(prepped, 'utf8'))
+            print()
+            #resp = session.send(prepped, verify=False)
+            
+def addtocart(sku):
 
-def getCookies():
-    options = webdriver.ChromeOptions()
-    options.add_argument('--proxy-server=socks5://' + proxy)
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument("--window-size=1920,1080")
-    options.add_argument("--log-level=3")
-    options.add_experimental_option('useAutomationExtension', False)
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    driver = webdriver.Chrome(executable_path=PATH, options=options)
-    driver.get("https://www.bestbuy.ca/en-ca/basket")
+      for profile in cart_profile:
+            profile = profile
+            sku = sku
 
+            cookies = {
+              'enabled': '1',
+              'ReturnUrl': 'https://www.bestbuy.ca/',
+              'surveyOptOut': '1',
+              'CS_Culture': 'en-CA',
+              'cartId': profile,
+            }
 
+            headers = {
+              'authority': 'www.bestbuy.ca',
+              'region-code': 'BC',
+              'content-type': 'application/json',
+              'postal-code': 'V3Z',
+              'accept-language': 'en-CA',
+              'sec-ch-ua-mobile': '?0',
+              'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
+              'sec-ch-ua': '"Chromium";v="88", "Google Chrome";v="88", ";Not A Brand";v="99"',
+              'accept': '*/*',
+              'origin': 'https://www.bestbuy.ca',
+              'sec-fetch-site': 'same-origin',
+              'sec-fetch-mode': 'cors',
+              'sec-fetch-dest': 'empty',
+              'referer': 'https://www.bestbuy.ca/en-ca/product/' + sku,
+            }
+
+            data = '{"id":"' + profile + '","lineItems":[{"sku":"' + sku + '","quantity":1}]}'
+            response = requests.post('https://www.bestbuy.ca/api/basket/v2/baskets', headers=headers1, cookies=cookies1, data=data1)
 
 
 def checkBB():
@@ -70,8 +114,13 @@ def checkBB():
                 print(response.elapsed.total_seconds())
                 for i in range(6):
                     status = str(match['availabilities'][i]['shipping']['status'])
-                    quantity = str(match['availabilities'][i]['shipping']['quantityRemaining'])
-                    print(status, quantity)
+                    quantity = float(match['availabilities'][i]['shipping']['quantityRemaining'])
+                    sku = str(match['availabilities'][i]['sku'])
+                    print(status, quantity, sku)
+                    if quantity >= 50:
+                          addtocart(sku)    
+                          checkout(profiles, sku)
+                          break    
                 countdown(1)    
 
             except requests.exceptions.RequestException as err:
