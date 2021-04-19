@@ -22,7 +22,7 @@ with open('./socks.txt') as f:
         proxies = f.read().splitlines()
 profiles = {'mouad.atfi@gmail.com': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":',
            '': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":'}
-cart_profile = []
+cart_profile = ['', '']
 totalprice = []
 
 def checkout(profiles, sku):
