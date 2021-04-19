@@ -11,14 +11,14 @@ url = "https://www.bestbuy.ca/identity/global/signin?redirectUrl=https://www.bes
 
 profiles = [
     {
-         'email': '@gmail.com', 
-         'password': 'pass123', 
-         'proxy': '1.1.1.1'
+         'email': 'mouad.atfi@gmail.com', 
+         'password': 'mouad17', 
+         'proxy': '138.197.132.33'
     }, 
     {
-         'email': '@gmail.com', 
-         'password': 'pass123', 
-         'proxy': '1.1.1.1'
+         'email': 'soloqxss@gmail.com', 
+         'password': 'Mouad.17', 
+         'proxy': '134.122.34.159'
     }  
 ]
 
