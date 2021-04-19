@@ -10,7 +10,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium_stealth import stealth
 import undetected_chromedriver as uc
 
-PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
+PATH = 'C:\\Users\\mouad.atfi\\Documents\\bot\\chromedriver.exe'
 url = "https://www.bestbuy.ca/identity/global/signin?redirectUrl=https://www.bestbuy.ca/checkout/?qit=1#/en-ca/shipping/BC/V3K&amp;lang=en-CA&amp;contextId=checkout"
 
 profiles = [
@@ -50,14 +50,14 @@ def Getcookies(user, email, password, proxy):
       driver.find_element_by_css_selector("#password").send_keys(password)
       driver.find_element_by_xpath('//*[@id="signIn"]/div/button').click()
 
-      time.sleep(10)
+      time.sleep(30)
 
       cookies = driver.get_cookies()
       s = requests.Session()
       for cookie in cookies:
         s.cookies.set(cookie['name'], cookie['value'])
       tx = s.cookies.get("tx")
-      print (tx)
+      #print (tx)
       if not tx:
         raise error.InternalServerException  
       with open(user, 'wb') as f:
