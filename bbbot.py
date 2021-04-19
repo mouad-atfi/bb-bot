@@ -231,7 +231,7 @@ def checkBB():
 
                 match = json.loads(decoded_data)
                 print(response.elapsed.total_seconds())
-                for i in range(6):
+                for i in range(5):
                     status = str(match['availabilities'][i]['shipping']['status'])
                     quantity = float(match['availabilities'][i]['shipping']['quantityRemaining'])
                     sku = str(match['availabilities'][i]['sku'])
