@@ -10,7 +10,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium_stealth import stealth
 import undetected_chromedriver as uc
 
-PATH = 'C:\\Users\\mouad.atfi\\Documents\\bot\\chromedriver.exe'
+PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 url = "https://www.bestbuy.ca/identity/global/signin?redirectUrl=https://www.bestbuy.ca/checkout/?qit=1#/en-ca/shipping/BC/V3K&amp;lang=en-CA&amp;contextId=checkout"
 
 profiles = [
