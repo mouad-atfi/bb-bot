@@ -1,18 +1,13 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import random
 import requests
 import json
-import os
 import time
 import sys
 import pickle
 import cookies
-from requests_toolbelt.utils import dump
+#from requests_toolbelt.utils import dump
 
-PATH = 'C:\\Users\\mouad.atfi\\Documents\\bot\\chromedriver.exe'
+PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 
 user_agent_list = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.72 Safari/537.36 Edg/89.0.774.75",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.72 Safari/537.36",
@@ -134,9 +129,7 @@ def order(s,token,proxy,email,name,offerid,sku,total,address):
     }
     data = f'{{"email":"{email}","lineItems":[{{"lineItemType":"Product","name":"{name}","offerId":"{offerid}","quantity":1,"sellerId":"bbyca","sku":"{sku}","total":{total}}}],"shippingAddress":{address}}}}}'
     order_call = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders', headers=headers, data=data, proxies=proxy)
-
-    data = dump.dump_all(order_call)
-    print(data.decode('utf-8'))
+    print(order_call)
 
 def submit(s,token,proxy,checkout,total):            
     #Submit call
@@ -163,9 +156,7 @@ def submit(s,token,proxy,checkout,total):
 
     data = f'{checkout}{price}}}'
     submit_call = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders/submit', headers=headers, data=data, proxies=proxy)
-    
-    data = dump.dump_all(submit_call)
-    print(data.decode('utf-8'))
+    print(submit_call.text)
     #resp = session.send(prepped, verify=False)
 
 def checkout(sku):
@@ -193,7 +184,6 @@ def checkout(sku):
 
             if sku == isku:
                 addtocart(proxy,cartId,sku)
-                countdown(1) 
                 order(s,token,proxy,email,name,offerid,sku,total,address)
                 countdown(1) 
                 submit(s,token,proxy,checkout,total)
@@ -203,13 +193,13 @@ def checkBB():
 
         for prox in proxies:
             proxy = { 'https': 'socks5://'+prox}
-            #user_agent = random.choice(user_agent_list)
+            user_agent = random.choice(user_agent_list)
             try:
                 #url = 'https://www.bestbuy.ca/ecomm-api/availability/products?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson&accept-language=en-CA&postalCode=E5S&skus=15084753|14953248|14954116|15166285|15078017|15229237'
                 headers = {
                     'authority': 'www.bestbuy.ca',
                     'upgrade-insecure-requests': '1',
-                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36',
+                    'user-agent': user_agent,
                     'referer': 'https://www.bestbuy.ca/en-ca/product/msi-nvidia-geforce-rtx-3060-ti-ventus-2x-oc-8gb-gddr6-video-card/15178453',
                     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
                     'sec-fetch-site': 'none',
