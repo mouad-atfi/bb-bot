@@ -2,15 +2,16 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import random
 import requests
 import json
 import os
 import time
 import sys
 import pickle
-import cookies
+#import cookies
 
-PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
+PATH = 'C:\\Users\\mouad.atfi\\Documents\\bot\\chromedriver.exe'
 
 user_agent_list = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.72 Safari/537.36 Edg/89.0.774.75",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.72 Safari/537.36",
@@ -20,36 +21,109 @@ user_agent_list = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 proxies = []
 with open('./socks.txt') as f:
         proxies = f.read().splitlines()
-profiles = {'mouad.atfi@gmail.com': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":',
-           '': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":'}
-cart_profile = ['', '']
-totalprice = []
 
-def checkout(profiles, sku):
-      for email, param in profiles.items():   
-            s = requests.session() 
-            with open(email, 'rb') as f:
+profiles = [
+    {
+         'user': 'mouadatfi',
+         'email': 'mouad.atfi@gmail.com',
+         'address': '{"address":"214-19138 26 Ave, Suite N327198","apartmentNumber":"","city":"Surrey","country":"CA","firstName":"Mouad","lastName":"Atfi","phones":[{"ext":"","phone":"4388660094"}],"postalCode":"V3Z 3V7","province":"BC"',
+         'submit': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":', 
+         'proxy': '138.197.132.33:8388'
+    }, 
+    {
+         'user': 'meriemcharaf',
+         'email': 'soloqxss@gmail.com', 
+         'address': '{"address":"214-19138 26 Ave, Suite N330440","apartmentNumber":"","city":"Surrey","country":"CA","firstName":"Meriem","lastName":"Charaf","phones":[{"ext":"","phone":"5148174913"}],"postalCode":"V3Z 3V7","province":"BC"',
+         'submit': '{"cvv":"617","email":"soloqxss@gmail.com","id":"2d96fc2d-5694-484e-8c7c-aece9d663371","totalPurchasePrice":', 
+         'proxy': '134.122.34.159:8388'
+    }  
+]
+
+products = [      
+    {
+         'sku': '15166285',
+         'name': 'NVIDIA GeForce RTX 3060 Ti 8GB GDDR6 Video Card',
+         'offerId': '2b866380-e1f8-4992-ad53-9fad31d51d4e',
+         'total': '549.99'     
+    },
+    {
+         'sku': '15078017',
+         'name': 'NVIDIA GeForce RTX 3070 8GB GDDR6 Video Card - Only at Best Buy',
+         'offerId': 'a16ece97-cf5d-4843-9901-55369d36f036',
+         'total': '679.99' 
+    },
+    {
+         'sku': '15084753',
+         'name': 'EVGA GeForce RTX 3080 XC3 Ultra Gaming 10GB GDDR6X Video Card',
+         'offerId': '182a59a8-2b28-4c19-8255-4a5d54978243',
+         'total': '1149.99'
+    },
+    {
+         'sku': '14953248',
+         'name': 'ASUS TUF Gaming NVIDIA GeForce RTX 3080 10GB GDDR6X Video Card',
+         'offerId': 'b30ccb4b-c7b9-40b3-89bc-1c5c5e055c74',
+         'total': '1199.99' 
+    },  
+    {
+         'sku': '14969729',
+         'name': 'ASUS TUF Gaming GeForce GTX 1660 Super OC 6GB DDR6 Video Card',
+         'offerId': 'baf1befb-6ab2-49f6-a5e3-21fa1cb70797',
+         'total': '369.99' 
+    }                  
+]
+
+def order(s,proxy,email,name,offerid,sku,total,address):
+    #order call
+    data = '{"email":"{}","lineItems":[{"lineItemType":"Product","name":"{}","offerId":"{}","quantity":1,"sellerId":"bbyca","sku":"{}","total":{}}],"shippingAddress":{}}}}}'.format(email,name,offerid,sku,total,address)
+    order_call = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders', data=data, proxies=proxy)
+    prepped = s.prepare_request(order_call)
+    print("Sending order:")
+    print(format_prepped_request(prepped, 'utf8'))
+    print()
+
+def submit(s,proxy,checkout,total):            
+    #Submit call
+    data = '{}{}}}'.format(checkout, price)
+    submit_call = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders/submit', data=data, proxies=proxy)
+    
+    prepped = s.prepare_request(submit_call)
+    print("Submit purchase:")
+    print(format_prepped_request(prepped, 'utf8'))
+    print()
+    #resp = session.send(prepped, verify=False)
+
+def checkout(sku):
+    for i in profiles:
+        for x in products:
+            sku = sku
+            user = (i['user'])
+            email = (i['email'])
+            address = (i['address'])
+            checkout = (i['submit'])
+            proxy = (i['proxy'])
+
+            isku = (x['sku'])
+            name = (x['name'])
+            offerid = (x['offerId'])
+            total = (x['total'])
+
+            proxy = { 'https': 'socks5://'+proxy}   
+            s = requests.session()
+
+            with open(user, 'rb') as f:
                   s.cookies.update(pickle.load(f))
             s.headers.update({'referer': 'https://www.bestbuy.ca/checkout/?qit=1'})      
             #token = s.cookies['x-tx']
+
+            if sku == isku:
+                order(s,proxy,email,name,offerid,sku,total,address)
+                submit(s,proxy,checkout,total)
+
             
-            data = '{"email":"mouad.atfi@gmail.com","lineItems":[{"lineItemType":"Product","name":"Corsair TM30 Performance Thermal Paste","offerId":"e90f8974-b6bf-43aa-9175-f5e729183a2c","quantity":1,"sellerId":"bbyca","sku":"14193869","total":10.99}],"shippingAddress":{"address":"214-19138 26 Ave, Suite N327198","apartmentNumber":"","city":"Surrey","country":"CA","firstName":"Mouad","lastName":"Atfi","phones":[{"ext":"","phone":"4388660094"}],"postalCode":"V3Z 3V7","province":"BC"}}'
-            response = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders', data=data)
+
             
-            
-            #url = "https://www.bestbuy.ca/api/checkout/checkout/orders/submit"
-            url = "test.com"
-            
-            s.headers.update({'referer': 'https://www.bestbuy.ca/checkout/?qit=1'})
-            
-            data = '{}{}}}'.format(param, price)
-            req = s.post(url, data=data)
-            
-            prepped = s.prepare_request(req)
-            print("Sending request:")
-            print(format_prepped_request(prepped, 'utf8'))
-            print()
-            #resp = session.send(prepped, verify=False)
+
+
             
 def addtocart(sku):
 
@@ -109,7 +183,7 @@ def checkBB():
                 params = (
                     ('accept', 'application/vnd.bestbuy.standardproduct.v1+json'),
                     ('accept-language', 'en-CA'),
-                    ('skus', '15084753|14953248|14954116|15166285|15078017|15229237'),
+                    ('skus', '15166285|15078017|15084753|14953248|14969729'),
                 )
 
                 response = requests.get('https://www.bestbuy.ca/ecomm-api/availability/products', headers=headers, params=params, proxies=proxy, timeout=5)
@@ -124,15 +198,16 @@ def checkBB():
                     sku = str(match['availabilities'][i]['sku'])
                     print(status, quantity, sku)
                     if status != 'InStock' and status == 'SoldOutOnline':
-                          cookies()
-                    if quantity >= 50:
-                          addtocart(sku)    
-                          checkout(profiles, sku)
+                          #cookies()
+                          continue
+                    if quantity >= 0:
+                          #addtocart(sku)    
+                          checkout(sku)
                           break    
-                countdown(1)    
+                countdown(20)    
 
             except requests.exceptions.RequestException as err:
-                print ("OOps: Something Else",err)
+                print ("Oops: Something Else",err)
             except requests.exceptions.HTTPError as errh:
                 print ("Http Error:",errh)
             except requests.exceptions.ConnectionError as errc:
@@ -151,7 +226,7 @@ def countdown(t):
 def main():
 
     while True:
-        cookies()
+        #cookies()
         checkBB()
 
 
