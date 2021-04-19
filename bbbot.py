@@ -8,7 +8,7 @@ import os
 import time
 import sys
 import pickle
-from requests_toolbelt.utils import dump
+import cookies
 
 PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 
@@ -117,6 +117,8 @@ def checkBB():
                     quantity = float(match['availabilities'][i]['shipping']['quantityRemaining'])
                     sku = str(match['availabilities'][i]['sku'])
                     print(status, quantity, sku)
+                    if status != 'InStock' and status == 'SoldOutOnline':
+                          cookies()
                     if quantity >= 50:
                           addtocart(sku)    
                           checkout(profiles, sku)
@@ -143,7 +145,7 @@ def countdown(t):
 def main():
 
     while True:
-        getCookies()
+        cookies()
         checkBB()
 
 
