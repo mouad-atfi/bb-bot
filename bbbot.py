@@ -30,7 +30,13 @@ def checkout(profiles, sku):
             s = requests.session() 
             with open(email, 'rb') as f:
                   s.cookies.update(pickle.load(f))
-            #token = s.cookies['x-tx']       
+            s.headers.update({'referer': 'https://www.bestbuy.ca/checkout/?qit=1'})      
+            #token = s.cookies['x-tx']
+            
+            data = '{"email":"mouad.atfi@gmail.com","lineItems":[{"lineItemType":"Product","name":"Corsair TM30 Performance Thermal Paste","offerId":"e90f8974-b6bf-43aa-9175-f5e729183a2c","quantity":1,"sellerId":"bbyca","sku":"14193869","total":10.99}],"shippingAddress":{"address":"214-19138 26 Ave, Suite N327198","apartmentNumber":"","city":"Surrey","country":"CA","firstName":"Mouad","lastName":"Atfi","phones":[{"ext":"","phone":"4388660094"}],"postalCode":"V3Z 3V7","province":"BC"}}'
+            response = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders', data=data)
+            
+            
             #url = "https://www.bestbuy.ca/api/checkout/checkout/orders/submit"
             url = "test.com"
             
