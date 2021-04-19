@@ -7,7 +7,10 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-PATH = 'C:\\Users\\mouad.atfi\\Documents\\bot\\chromedriver.exe'
+from selenium_stealth import stealth
+import undetected_chromedriver as uc
+
+PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 url = "https://www.bestbuy.ca/identity/global/signin?redirectUrl=https://www.bestbuy.ca/checkout/?qit=1#/en-ca/shipping/BC/V3K&amp;lang=en-CA&amp;contextId=checkout"
 
 profiles = [
@@ -26,7 +29,7 @@ profiles = [
 ]
 
 def Getcookies(user, email, password, proxy):
-    options = webdriver.ChromeOptions()
+    options = uc.ChromeOptions()
     proxy = proxy
     options.add_argument('--proxy-server=socks5://' + proxy)
     options.add_argument('--ignore-certificate-errors')
@@ -34,12 +37,13 @@ def Getcookies(user, email, password, proxy):
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--log-level=3")
     #options.add_argument("--disable-dev-shm-usage")
-    options.add_argument('--disable-gpu')
+    #options.add_argument('--disable-gpu')
     #options.add_argument("--disable-blink-features")
     options.add_experimental_option('useAutomationExtension', False)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
-    with webdriver.Chrome(executable_path=PATH, options=options) as driver:
+
+    with uc.Chrome(options=options) as driver:
 
       driver.get(url)
       driver.find_element_by_css_selector("#username").send_keys(email)
@@ -57,7 +61,8 @@ def Getcookies(user, email, password, proxy):
       if not tx:
         raise error.InternalServerException  
       with open(user, 'wb') as f:
-        pickle.dump(s.cookies, f) 
+        pickle.dump(s.cookies, f)
+      #time.sleep(320)   
     
 def main():
   p = multiprocessing.Pool()
