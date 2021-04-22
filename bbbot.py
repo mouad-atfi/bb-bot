@@ -226,15 +226,15 @@ def checkBB():
                     quantity = float(match['availabilities'][i]['shipping']['quantityRemaining'])
                     sku = str(match['availabilities'][i]['sku'])
                     print(status, quantity, sku)
-                    if status != 'InStock' and sku != '14969729' and status == 'SoldOutOnline':
-                          print('refresh cookies')
-                          cookies.main()
-                          continue
-                    if quantity >= 50:
+                    #if status != 'InStock' and sku != '14969729' and status == 'SoldOutOnline':
+                          #print('refresh cookies')
+                          #cookies.main()
+                          #continue
+                    if quantity >= 10:
                           #addtocart(sku)    
                           checkout(sku)
                           break    
-                countdown(3)    
+                #countdown(3)    
 
             except requests.exceptions.RequestException as err:
                 print ("Oops: Something Else",err)
