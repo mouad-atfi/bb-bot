@@ -212,7 +212,7 @@ def checkBB():
                 params = (
                     ('accept', 'application/vnd.bestbuy.standardproduct.v1+json'),
                     ('accept-language', 'en-CA'),
-                    ('skus', '15166285|15078017|15084753|14953248|14969729'),
+                    ('skus', '15166285|15078017|15084753|14953248|15229237'),
                 )
 
                 response = requests.get('https://www.bestbuy.ca/ecomm-api/availability/products', headers=headers, params=params, proxies=proxy, timeout=5)
