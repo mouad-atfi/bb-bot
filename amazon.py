@@ -16,7 +16,7 @@ import pickle
 # make sure this path is correct
 PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 
-#asins = ['B08L8KC1J7', 'B08L8LG4M3', 'B08HH5WF97', 'B08HR3Y5GQ', 'B08MT6B58K']
+domains = ['smile.amazon.com', 'amazon.com']
 
 asins = [      
     {
@@ -46,7 +46,11 @@ asins = [
     {
          'asin': 'B08L8L9TCZ',
          'price': '750'    
-    },                 
+    },
+    {
+         'asin': 'B08L8L71SM',
+         'price': '750'    
+    },                        
 ]
 
 def checkBB(proxy,event):
@@ -59,18 +63,11 @@ def checkBB(proxy,event):
         options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--log-level=3")
-        #options.add_argument("--disable-dev-shm-usage")
         options.add_argument('--disable-gpu')
-        #options.add_argument("--disable-blink-features")
         options.add_experimental_option('useAutomationExtension', False)
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        #options.add_argument('--disable-blink-features=AutomationControlled')
-        #options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 2, 'profile.managed_default_content_settings.images': 2})
         driver = uc.Chrome(options=options) 
-        #driver = webdriver.Chrome(executable_path=PATH, options=options) 
-        #driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'})
-        #print(driver.execute_script("return navigator.userAgent;"))
         driver.set_page_load_timeout(10)
         stealth(driver,
                 languages=["en-US", "en"],
@@ -80,44 +77,40 @@ def checkBB(proxy,event):
                 renderer="Intel Iris OpenGL Engine",
                 fix_hairline=True,
                 )
-
+        driver.get('https://www.amazon.com/gp/cart/view.html?ref_=nav_cart')
         while True:
-            for i in asins:
-                asin = (i['asin'])
-                price = (i['price'])
-                try:
-                    #multi_url = 'https://smile.amazon.com/gp/aws/cart/add.html?OfferListingId.1={}&Quantity.1=1&OfferListingId.2={}&Quantity.2=1&OfferListingId.3={}&Quantity.3=1&OfferListingId.4={}&Quantity.4=1&OfferListingId.5={}&Quantity.5=1&confirmPage=confirm'
-                    #url = f'https://smile.amazon.com/gp/aws/cart/add.html?OfferListingId.1={offerid}&Quantity.1=1&confirmPage=confirm'
-                    url = f'https://amazon.com/gp/aod/ajax/ref=aod_f_primeEligible?asin={asin}'
-                    t0= time.perf_counter()
-                    print(asin)
-
-                    driver.get(url)
-
-                    t1 = time.perf_counter() - t0
-                    print ('\r{:.2f} sec'.format(t1))
+            for domain in domains:
+                for i in asins:
+                    asin = (i['asin'])
+                    price = (i['price'])
                     try:
-                        #item = driver.find_element_by_xpath("/html/body/div[3]/div/div/form/span/table/tbody/tr[2]/td[2]/a").text
-                        offerid = driver.find_element_by_name("offeringID.1").get_attribute('value')
-                        digits = driver..find_elements_by_class_name("a-offscreen").text
-                        aprice = digits.strip('$').replace(',','')
+                        #multi_url = 'https://smile.amazon.com/gp/aws/cart/add.html?OfferListingId.1={}&Quantity.1=1&OfferListingId.2={}&Quantity.2=1&OfferListingId.3={}&Quantity.3=1&OfferListingId.4={}&Quantity.4=1&OfferListingId.5={}&Quantity.5=1&confirmPage=confirm'
+                        url = f'https://{domain}/gp/aod/ajax/ref=aod_f_primeEligible?asin={asin}'
+                        t0= time.perf_counter()
+                        driver.get(url)
+                        t1 = time.perf_counter() - t0
+                        #print(driver.page_source)
+                        print ('\r{:.2f} sec'.format(t1)) 
+                        name = driver.find_element_by_id('aod-asin-title-text').text
+                        print(name)
                         
-                        print (aprice)
-                        
-
-                        if offerid and float(aprice) < price:
-                            print('Checking out ATM')
-                            turboATC(asin,offerid)
-                            event.set()
-                            
+                        try:
+                            offerid = driver.find_element_by_name("offeringID.1").get_attribute('value')
+                            digits = driver.find_element_by_xpath("//span[contains(@class,'a-offscreen')]").text
+                            aprice = digits.strip('$').replace(',','')
+                            if float(aprice) < price:
+                                print('Checking out ATM: ', asin)
+                                turboATC(asin,offerid)
+                                event.set()
+                                
+                        except Exception as e:
+                            pass
+                        time.sleep(2)                    
                     except Exception as e:
-                        #print (e)
-                        pass  # it was a string, not an int.             
-                except Exception as e:
-
-                    print('==========>>>>>>>>', proxy)
-                    print(e)        
-            time.sleep(45)
+                        print('error')
+                        pass
+                    time.sleep(2)       
+            time.sleep(30)
 
 #def pushmessage(offerid,sessionid):
 
@@ -133,7 +126,7 @@ def turboATC(asin,offerid):
 
         asin = asin
         offerid = offerid
-        cookies = 'at-main=Atza|IwEBIANS8LCatNBDJo2J_wjq-uigErWwDsgKNm4Xp-0xF5ewndZ5ZMmkP4Txd9OPdzeH-o8Emh-1px30PYMx77-z8aibDpI5KJKDSoNymxtYG8__yg10ZgcMIoHMEdhk2f6rK3ApIIyzWOUfcbm7TE3Y6B_r9XgMDq3YvwxOsjytLCXvezi3JBd13IR8b-4VNSYFBo-MZco58C28__JYZM0_BCAOUO0zGkkX6hJsps6YvGmH2Q; aws_lang=en; aws-target-data=%7B%22support%22%3A%221%22%7D; aws-target-visitor-id=1618496195610-717256; i18n-prefs=USD; lc-main=en_US; regStatus=pre-register; s_campaign=PSM%7Cpsc-2021-ec2_ec2_amd-adop-namer-fb-prospect-itpro-right_size%7CFB%7CPSC-CI%7CEC2%20Adoption%20AMD%7C3128864%7CAustin%7C%7CSC%7Cright_size%7C1200x628%7C%7CPROS%7CPersona%7C%7CAMD%7CEN%7CPA%7CAll%7CIT%20Pro%7CCompute%7CNAMER%7CNAMER%7Cpsm_a134p000006peeSAAQ; s_cc=true; s_eVar60=psm_a134p000006peeSAAQ; s_fid=10D65790BD3E9662-0E495B7B175F9B10; sess-at-main="JYhh8gxiBslO/kqg9CLHKB+7ZINYTzfeMyPRXcV0brQ="; session-id=133-9013249-1407720; skin=noskin; sst-main=Sst1|PQFaGWu7J2h5IuNc2LZKdajtCRijIOMekV60ZkJVaTETGt9Loyl_4O82jLyfB5QYyq6TY-rSsBxVJhk3kuFn_9xsnDC0L9EQqP857UtdoSRpyqj4thl_5zBbMX1d6bHj6RRgin08pEXCVtTX0sKjTXXQAAdwxDUehWJ3zMYqvrbzfdgYUsSfaIi2z4JXly2KCTnJ2x7S1ZPsT01icJ9eaxXiYpplO4zC8oBX_mQgNk77Wk2QebA9cKgra0Su2ZSDjIReHc8QJKuf-gHtcJyFIX0I1kaHUdNRbmjhrTM2i5EVokQ; ubid-main=133-1834581-4094037; x-main="v8pymdSmc?mZyoO??ZV5X9VnBaWJ064XPW1uo4wPrlMJqOzapjWNf2wzacd?aXtC"; csd-key=eyJ3YXNtVGVzdGVkIjp0cnVlLCJ3YXNtQ29tcGF0aWJsZSI6dHJ1ZSwid2ViQ3J5cHRvVGVzdGVkIjpmYWxzZSwidiI6MSwia2lkIjoiMGQ3NmRiIiwia2V5IjoiaEFMdGhoWGdqcU5qRHd4U2wrZDYyY3M5ZCs0akZLWncyQWFuZzdaMG5yK2YvRGRZcldTTGczckFoMzVkVU5qU3pUQ0lzMzlJeU9IZCtnby9BRy8vdjFUKy9RdHRaUXJZMnk1cDVNbnA3SVJtcXRlNE1DQmFRRGRWS1NTOHFQYm9NUDNsd3BuQzJPZjJyZG1BMWVXMUZUNDNyZ1FSanRkK1VaemV4eEpjb3JwZll6bnJWbVhuNzJDSGRHUTdZVVl4TEJQMWQ5OFBHWk1BLzJHSzhiRUlZNlhyZm1hNHBRMzVta1dsS3BDMEp6ZUJqNDE2Y2hWY2ZVTHhsMkJhdHovZGlDeVE5TlIzZTFsVDhUY0ZuZUorSXF0dDFpMytFcjhaTTduWTBlSUw3aFJqUVErWjMvRkFPTUxrY2kvUDlIdlFxRzVRT0IrejJ3c29TR2hmMmVLY0tBPT0ifQ==; s_nr=1619097147581-New; s_vnum=2051097147582%26vn%3D1; s_dslv=1619097147582; s_sq=%5B%5BB%5D%5D; session-id-time=2082787201l; session-token="3voPf4tRNo/RYAK8fK1frf1aD7SEOMvaFee6HcJuBidLHz4qfoJhUjcL4x2729nwhN/50vHsCw3qyMPuAzLWufsYuNZ/ojYQdcsaBzMAYnWVBJ/hEi1GAVG6ygBVfhk2RtpENUYa3QdB0hSwVGifQ3x6wotRj1uPAokETI8kfzoJLR3S648BZ4M1wRbw3ppYnaDjp1e0t7R/PCUJXIGBDytpHjmShQWyQAuZgsR7TPo60VbTXUtQmdAzGrKaYwqE/p54YSP7Ntk5deWYIAbpmw=="; csm-hit=tb:XDS3FJT93JVQH5T22H65+b-G382SR5EN2TS8TJF7WJ6|1619107560227&t:1619107560227&adb:adblk_no'   
+        cookies = 'session-id=135-7453302-3097227; ubid-main=132-8488874-8720246; session-token=ir3BkkeQGW5l67J5L5jUkJSRCPTQdKktZeGrXpPQqg8qFYbCR7S+33To25HJp1aqlTNypW7z55nCYpdYg5+XOOzYIZ3XQAGj7MPVRoLTGZnrC4mkVNxjOyi2vNI0A2gwTDLjt32kIqwOcMgmugFszaHPJWBCeXqnegj2IRkTcc6vlee4E3YPyliV+aABVfDjy3PJi6BGUvBzeuSxeLqXDJvBqAaPiAXJ6p8XjT9LTlQ+eZmAqujgZ5S6aanCl2wbYgDQ488d/GchbOsV4l08o8PU1aoFVmo+; x-main="wnXTsEtTTO60xCASCXppECESjLW@Ex372XzdMQu4l1Zihd1fZ2AzVOcABXlohf6A"; at-main=Atza|IwEBID8XyMiRIKDS5l3-jjXAIeK1tAt1KofkwdZOYXdi0HFIaSD6PSTJ_8DEwyMSEeCDyRFzViS7LnXcRHF2801OGF_azOfA9iZEwl_YBFohWm_jViLVLNGy2zpGySlkiVQPG8juMJsxS1L0cG0SrRgUNEZYaaScppf6M2CRaskN7G_vvtG6XhLz8vYd8g-0eW-XDehi2T3csZ5XEhZVc1mbQdTx; sess-at-main="rTclxCG9/5QLKfCbIXOOluZtOyXBiqA2hIyQpFwZa6Y="; sst-main=Sst1|PQHvOKKBBMZMQnFDmkKG5dRdCYlSMRf_7r0hholWo8c16JIJo07BYc_kqCRCvzTcojeXrEyq3LpK8rlcTUjIY__VjAeYr1kGlydK4xsXIS-XYERrgR7U4MKUWzDa9IyiCxC8zVSNYwgIj20Lb3GFZ-ZYtv8tZpaj1LIVdarEKPlP7pyKPm0JFWaomSjn4Z9O-SQvCC0huq80R1kKRCluUczYgRqMLlMIT3Kw9aiu3iTDCYxWS1GU7fQI8QdO4q3udfRcgDqNrVsKfspRd3VkV2yjrpVb9Mh-RdNGhcDe9WqQY4E; lc-main=en_US; i18n-prefs=USD; session-id-time=2082787201l; csm-hit=tb:s-BF5R1C07DQ94X06P2GSF|1619196547447&t:1619196547453&adb:adblk_no'   
 
         headers = {
             'authority': 'smile.amazon.com',
