@@ -14,22 +14,40 @@ import requests
 import pickle
 
 # make sure this path is correct
-PATH = 'C:\\Users\\mouad.atfi\\Documents\\bot\\chromedriver.exe'
+PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 
-offeridlist = ['UY1epatIWfF3MNA8YEyITOpaHDmhCUsNXK6dOGB8%2FBsb%2Fx19D2vH4BJCd6JUCAFy6UjqJPpdHztHxzbplj4B2bNBN7EDEQjuzCSben8MOjJR6g67yfz5DUwcKgpheap0LvbFFibok8MosmOzEzIn8w%3D%3D',
-           # 'y3R1UdH251cREqi83DvayyqeRMzELG2W6NBWm7JQplCsJQQ3aoYZmbYoFs7wchAJkSHvTjYme89beUs3JY8WKg79XhDTex65fAGH8qlgbv1LcUHBx3CqY7G1OHuSrpfs91bO8jekMTjqrMCTtO0G7g%3D%3D',
-           # 'sEstwZmJjcNQYLV8cVAtgvs1hVJjsDdJLE0mpu4blmCjZWnPzbEs78cWfFoC7Fw3f1TKg7hG55vjkWRtV9%2FjvpBGqDh%2B3CHHuYk8dAR63FZP7fFqin3q45en2jzMaiIVBOqv26l%2BrHiN%2Bpf2RSir3Q%3D%3D',
-           # '3UlxQRWI%2BkroT%2FPzmwoI3ml9HpwL2gQu3WDvEyd0HppIf%2F13mhOFqoNCq3ZjNNCJ6ze4gAeUmJMkabj01tf0%2B0T2GNBE5JuRDdcb4IFNbeSGAAHYWNk64Vw27H0Z0Wc95pQAP2Ugd4KjAooe9Zvj7w%3D%3D',
-            'XxPFA2X73me9%2BD6uuisgJFQy1KGmyOndrdObETZCZkWQPWi18SvUKztmJhCHyRkIiptvUuUKhB6JxrztDyvJ18T45kQroVgbaRQIYdTl%2FZ5MtMLH%2FliEKVKoGiC%2BSvbTdvcpCcFvfGN7b5Lve7Px1A%3D%3D',
-           # '5OWZDJsyFvtDylhF%2BN5umyzDgISwzmz7r%2F6wlwBGWeqSJvCfGkmfwjMiEkdtM2eAERfF5Fvc6Z3jaGLz%2BiVht76nQHkzlIGqFNIAqDE8VRSNVbraQH%2BdsmejoIKOUVVVlpSiMNik6SOSrTGBT8GSBg%3D%3D',
-           # '94zSXPjJ063cuJSTenOo%2FtGj4p8NoLgmTtLuMGd6CmEb2b%2F0XmefWSw50Gas8MOqSe5mVApTaKsj4wWH9RCFRi2X5EyueLyJU%2F2D7UCZMOYniVCvFiBSFEyFmYCszYtDxEZN%2FlaledHjNzGVOGNgIw%3D%3D',
-           # '8r0UVxTtC73d5kH4RKIJjBHW1k1sKdXXE%2FNYtS6q4M2mNmR%2FZcW8%2FJV%2BFFGDDvWzFPHhdtjJwTDvyijM66Wl6UgotuHZ9m18LKgdZwNKfC7V5ofGi%2FmIo5vC87MvVA4Co6fcQ%2F3D60IQ%2F1MdNnmVKQ%3D%3D',
-           # '8r0UVxTtC73d5kH4RKIJjBHW1k1sKdXXE%2FNYtS6q4M2mNmR%2FZcW8%2FJV%2BFFGDDvWzFPHhdtjJwTDvyijM66Wl6UgotuHZ9m18LKgdZwNKfC7V5ofGi%2FmIo5vC87MvVA4Co6fcQ%2F3D60IQ%2F1MdNnmVKQ%3D%3D',
-           # 'IxFSurbOSFvHXinfpn1jIJc%2FZrsKedmcI9rDB0Zy3EQq12ZxQk%2F%2FRAGvW93sLQ2ZKIwokbMu9uN%2F7tmM%2BY6GzJKZNFzJKSobk7act7CsBLPdy1A97oLa5BJbothkF%2BsQ4nEQ032ihdIz7jU6a5wBMA%3D%3D'
-           'ggis6d38qwrxGxl0wKUjXf06D0hKZTQg6E4J%2BbAQBvRcYFdD55dH5NhOkhvD0Fp6hlxFem%2FoVdrdvsoNFYixAePVDIjKouLkGJKOiDz9iKdnQZo8wChG5NKWl8EpUB%2FZ6NpRaF7axNaUhz9acBljzw%3D%3D',
-           'Vp7Q5CHUqNqFYzXR7Fb4Ogo1MbAyT1scYM7eI%2FPUI9IvO15AP%2BZM%2BndrftFiIWzdexzwqbICHVugB8j3WE4qLpe7Xm6ecZTqDt15X1W2TUlEZ9aJx%2B3NaIOToY3RHiZWS%2F6lo3Slol%2BG5wFFk5TWGw%3D%3D'
-           ]
-asins = ['B08L8KC1J7', 'B08L8LG4M3', 'B08HH5WF97', 'B08HR3Y5GQ', 'B08MT6B58K']
+#asins = ['B08L8KC1J7', 'B08L8LG4M3', 'B08HH5WF97', 'B08HR3Y5GQ', 'B08MT6B58K']
+
+asins = [      
+    {
+         'asin': 'B08L8KC1J7',
+         'price': '780'    
+    },
+    {
+         'asin': 'B08L8LG4M3',
+         'price': '750'    
+    },
+    {
+         'asin': 'B08HH5WF97',
+         'price': '900'    
+    },
+    {
+         'asin': 'B08HR3Y5GQ',
+         'price': '950'    
+    },
+    {
+         'asin': 'B08MT6B58K',
+         'price': '700'    
+    },
+    {
+         'asin': 'B08KWLMZV4',
+         'price': '700'    
+    },
+    {
+         'asin': 'B08L8L9TCZ',
+         'price': '750'    
+    },                 
+]
 
 def checkBB(proxy,event):
 
@@ -64,7 +82,9 @@ def checkBB(proxy,event):
                 )
 
         while True:
-            for asin in asins:
+            for i in asins:
+                asin = (i['asin'])
+                price = (i['price'])
                 try:
                     #multi_url = 'https://smile.amazon.com/gp/aws/cart/add.html?OfferListingId.1={}&Quantity.1=1&OfferListingId.2={}&Quantity.2=1&OfferListingId.3={}&Quantity.3=1&OfferListingId.4={}&Quantity.4=1&OfferListingId.5={}&Quantity.5=1&confirmPage=confirm'
                     #url = f'https://smile.amazon.com/gp/aws/cart/add.html?OfferListingId.1={offerid}&Quantity.1=1&confirmPage=confirm'
@@ -79,10 +99,13 @@ def checkBB(proxy,event):
                     try:
                         #item = driver.find_element_by_xpath("/html/body/div[3]/div/div/form/span/table/tbody/tr[2]/td[2]/a").text
                         offerid = driver.find_element_by_name("offeringID.1").get_attribute('value')
-                        print (offerid)
+                        digits = driver..find_elements_by_class_name("a-offscreen").text
+                        aprice = digits.strip('$').replace(',','')
+                        
+                        print (aprice)
                         
 
-                        if offerid:
+                        if offerid and float(aprice) < price:
                             print('Checking out ATM')
                             turboATC(asin,offerid)
                             event.set()
@@ -110,6 +133,7 @@ def turboATC(asin,offerid):
 
         asin = asin
         offerid = offerid
+        cookies = 'at-main=Atza|IwEBIANS8LCatNBDJo2J_wjq-uigErWwDsgKNm4Xp-0xF5ewndZ5ZMmkP4Txd9OPdzeH-o8Emh-1px30PYMx77-z8aibDpI5KJKDSoNymxtYG8__yg10ZgcMIoHMEdhk2f6rK3ApIIyzWOUfcbm7TE3Y6B_r9XgMDq3YvwxOsjytLCXvezi3JBd13IR8b-4VNSYFBo-MZco58C28__JYZM0_BCAOUO0zGkkX6hJsps6YvGmH2Q; aws_lang=en; aws-target-data=%7B%22support%22%3A%221%22%7D; aws-target-visitor-id=1618496195610-717256; i18n-prefs=USD; lc-main=en_US; regStatus=pre-register; s_campaign=PSM%7Cpsc-2021-ec2_ec2_amd-adop-namer-fb-prospect-itpro-right_size%7CFB%7CPSC-CI%7CEC2%20Adoption%20AMD%7C3128864%7CAustin%7C%7CSC%7Cright_size%7C1200x628%7C%7CPROS%7CPersona%7C%7CAMD%7CEN%7CPA%7CAll%7CIT%20Pro%7CCompute%7CNAMER%7CNAMER%7Cpsm_a134p000006peeSAAQ; s_cc=true; s_eVar60=psm_a134p000006peeSAAQ; s_fid=10D65790BD3E9662-0E495B7B175F9B10; sess-at-main="JYhh8gxiBslO/kqg9CLHKB+7ZINYTzfeMyPRXcV0brQ="; session-id=133-9013249-1407720; skin=noskin; sst-main=Sst1|PQFaGWu7J2h5IuNc2LZKdajtCRijIOMekV60ZkJVaTETGt9Loyl_4O82jLyfB5QYyq6TY-rSsBxVJhk3kuFn_9xsnDC0L9EQqP857UtdoSRpyqj4thl_5zBbMX1d6bHj6RRgin08pEXCVtTX0sKjTXXQAAdwxDUehWJ3zMYqvrbzfdgYUsSfaIi2z4JXly2KCTnJ2x7S1ZPsT01icJ9eaxXiYpplO4zC8oBX_mQgNk77Wk2QebA9cKgra0Su2ZSDjIReHc8QJKuf-gHtcJyFIX0I1kaHUdNRbmjhrTM2i5EVokQ; ubid-main=133-1834581-4094037; x-main="v8pymdSmc?mZyoO??ZV5X9VnBaWJ064XPW1uo4wPrlMJqOzapjWNf2wzacd?aXtC"; csd-key=eyJ3YXNtVGVzdGVkIjp0cnVlLCJ3YXNtQ29tcGF0aWJsZSI6dHJ1ZSwid2ViQ3J5cHRvVGVzdGVkIjpmYWxzZSwidiI6MSwia2lkIjoiMGQ3NmRiIiwia2V5IjoiaEFMdGhoWGdqcU5qRHd4U2wrZDYyY3M5ZCs0akZLWncyQWFuZzdaMG5yK2YvRGRZcldTTGczckFoMzVkVU5qU3pUQ0lzMzlJeU9IZCtnby9BRy8vdjFUKy9RdHRaUXJZMnk1cDVNbnA3SVJtcXRlNE1DQmFRRGRWS1NTOHFQYm9NUDNsd3BuQzJPZjJyZG1BMWVXMUZUNDNyZ1FSanRkK1VaemV4eEpjb3JwZll6bnJWbVhuNzJDSGRHUTdZVVl4TEJQMWQ5OFBHWk1BLzJHSzhiRUlZNlhyZm1hNHBRMzVta1dsS3BDMEp6ZUJqNDE2Y2hWY2ZVTHhsMkJhdHovZGlDeVE5TlIzZTFsVDhUY0ZuZUorSXF0dDFpMytFcjhaTTduWTBlSUw3aFJqUVErWjMvRkFPTUxrY2kvUDlIdlFxRzVRT0IrejJ3c29TR2hmMmVLY0tBPT0ifQ==; s_nr=1619097147581-New; s_vnum=2051097147582%26vn%3D1; s_dslv=1619097147582; s_sq=%5B%5BB%5D%5D; session-id-time=2082787201l; session-token="3voPf4tRNo/RYAK8fK1frf1aD7SEOMvaFee6HcJuBidLHz4qfoJhUjcL4x2729nwhN/50vHsCw3qyMPuAzLWufsYuNZ/ojYQdcsaBzMAYnWVBJ/hEi1GAVG6ygBVfhk2RtpENUYa3QdB0hSwVGifQ3x6wotRj1uPAokETI8kfzoJLR3S648BZ4M1wRbw3ppYnaDjp1e0t7R/PCUJXIGBDytpHjmShQWyQAuZgsR7TPo60VbTXUtQmdAzGrKaYwqE/p54YSP7Ntk5deWYIAbpmw=="; csm-hit=tb:XDS3FJT93JVQH5T22H65+b-G382SR5EN2TS8TJF7WJ6|1619107560227&t:1619107560227&adb:adblk_no'   
 
         headers = {
             'authority': 'smile.amazon.com',
@@ -133,7 +157,7 @@ def turboATC(asin,offerid):
             'sec-fetch-dest': 'empty',
             'referer': f'https://smile.amazon.com/gp/product/{asin}/',
             'accept-language': 'en-US,en;q=0.9,fr-CA;q=0.8,fr;q=0.7,ar;q=0.6,la;q=0.5',
-            'cookie': 'at-main=Atza|IwEBIANS8LCatNBDJo2J_wjq-uigErWwDsgKNm4Xp-0xF5ewndZ5ZMmkP4Txd9OPdzeH-o8Emh-1px30PYMx77-z8aibDpI5KJKDSoNymxtYG8__yg10ZgcMIoHMEdhk2f6rK3ApIIyzWOUfcbm7TE3Y6B_r9XgMDq3YvwxOsjytLCXvezi3JBd13IR8b-4VNSYFBo-MZco58C28__JYZM0_BCAOUO0zGkkX6hJsps6YvGmH2Q; aws_lang=en; aws-target-data=%7B%22support%22%3A%221%22%7D; aws-target-visitor-id=1618496195610-717256; i18n-prefs=USD; lc-main=en_US; regStatus=pre-register; s_campaign=PSM%7Cpsc-2021-ec2_ec2_amd-adop-namer-fb-prospect-itpro-right_size%7CFB%7CPSC-CI%7CEC2%20Adoption%20AMD%7C3128864%7CAustin%7C%7CSC%7Cright_size%7C1200x628%7C%7CPROS%7CPersona%7C%7CAMD%7CEN%7CPA%7CAll%7CIT%20Pro%7CCompute%7CNAMER%7CNAMER%7Cpsm_a134p000006peeSAAQ; s_cc=true; s_eVar60=psm_a134p000006peeSAAQ; s_fid=10D65790BD3E9662-0E495B7B175F9B10; sess-at-main="JYhh8gxiBslO/kqg9CLHKB+7ZINYTzfeMyPRXcV0brQ="; session-id=133-9013249-1407720; skin=noskin; sst-main=Sst1|PQFaGWu7J2h5IuNc2LZKdajtCRijIOMekV60ZkJVaTETGt9Loyl_4O82jLyfB5QYyq6TY-rSsBxVJhk3kuFn_9xsnDC0L9EQqP857UtdoSRpyqj4thl_5zBbMX1d6bHj6RRgin08pEXCVtTX0sKjTXXQAAdwxDUehWJ3zMYqvrbzfdgYUsSfaIi2z4JXly2KCTnJ2x7S1ZPsT01icJ9eaxXiYpplO4zC8oBX_mQgNk77Wk2QebA9cKgra0Su2ZSDjIReHc8QJKuf-gHtcJyFIX0I1kaHUdNRbmjhrTM2i5EVokQ; ubid-main=133-1834581-4094037; x-main="v8pymdSmc?mZyoO??ZV5X9VnBaWJ064XPW1uo4wPrlMJqOzapjWNf2wzacd?aXtC"; csd-key=eyJ3YXNtVGVzdGVkIjp0cnVlLCJ3YXNtQ29tcGF0aWJsZSI6dHJ1ZSwid2ViQ3J5cHRvVGVzdGVkIjpmYWxzZSwidiI6MSwia2lkIjoiMGQ3NmRiIiwia2V5IjoiaEFMdGhoWGdqcU5qRHd4U2wrZDYyY3M5ZCs0akZLWncyQWFuZzdaMG5yK2YvRGRZcldTTGczckFoMzVkVU5qU3pUQ0lzMzlJeU9IZCtnby9BRy8vdjFUKy9RdHRaUXJZMnk1cDVNbnA3SVJtcXRlNE1DQmFRRGRWS1NTOHFQYm9NUDNsd3BuQzJPZjJyZG1BMWVXMUZUNDNyZ1FSanRkK1VaemV4eEpjb3JwZll6bnJWbVhuNzJDSGRHUTdZVVl4TEJQMWQ5OFBHWk1BLzJHSzhiRUlZNlhyZm1hNHBRMzVta1dsS3BDMEp6ZUJqNDE2Y2hWY2ZVTHhsMkJhdHovZGlDeVE5TlIzZTFsVDhUY0ZuZUorSXF0dDFpMytFcjhaTTduWTBlSUw3aFJqUVErWjMvRkFPTUxrY2kvUDlIdlFxRzVRT0IrejJ3c29TR2hmMmVLY0tBPT0ifQ==; s_nr=1619097147581-New; s_vnum=2051097147582%26vn%3D1; s_dslv=1619097147582; s_sq=%5B%5BB%5D%5D; session-id-time=2082787201l; session-token="3voPf4tRNo/RYAK8fK1frf1aD7SEOMvaFee6HcJuBidLHz4qfoJhUjcL4x2729nwhN/50vHsCw3qyMPuAzLWufsYuNZ/ojYQdcsaBzMAYnWVBJ/hEi1GAVG6ygBVfhk2RtpENUYa3QdB0hSwVGifQ3x6wotRj1uPAokETI8kfzoJLR3S648BZ4M1wRbw3ppYnaDjp1e0t7R/PCUJXIGBDytpHjmShQWyQAuZgsR7TPo60VbTXUtQmdAzGrKaYwqE/p54YSP7Ntk5deWYIAbpmw=="; csm-hit=tb:XDS3FJT93JVQH5T22H65+b-G382SR5EN2TS8TJF7WJ6|1619107560227&t:1619107560227&adb:adblk_no',
+            'cookie': cookies,
         }
 
         params = (
@@ -182,7 +206,7 @@ def turboATC(asin,offerid):
             'sec-fetch-dest': 'empty',
             'referer': f'https://smile.amazon.com/checkout/spc?pid={pid}&pipelineType=turbo&clientId=retailwebsite&temporaryAddToCart=1&hostPage=detail&weblab=RCX_CHECKOUT_TURBO_DESKTOP_NONPRIME_87784',
             'accept-language': 'en-US,en;q=0.9,fr-CA;q=0.8,fr;q=0.7,ar;q=0.6,la;q=0.5',
-            'cookie': 'at-main=Atza|IwEBIANS8LCatNBDJo2J_wjq-uigErWwDsgKNm4Xp-0xF5ewndZ5ZMmkP4Txd9OPdzeH-o8Emh-1px30PYMx77-z8aibDpI5KJKDSoNymxtYG8__yg10ZgcMIoHMEdhk2f6rK3ApIIyzWOUfcbm7TE3Y6B_r9XgMDq3YvwxOsjytLCXvezi3JBd13IR8b-4VNSYFBo-MZco58C28__JYZM0_BCAOUO0zGkkX6hJsps6YvGmH2Q; aws_lang=en; aws-target-data=%7B%22support%22%3A%221%22%7D; aws-target-visitor-id=1618496195610-717256; i18n-prefs=USD; lc-main=en_US; regStatus=pre-register; s_campaign=PSM%7Cpsc-2021-ec2_ec2_amd-adop-namer-fb-prospect-itpro-right_size%7CFB%7CPSC-CI%7CEC2%20Adoption%20AMD%7C3128864%7CAustin%7C%7CSC%7Cright_size%7C1200x628%7C%7CPROS%7CPersona%7C%7CAMD%7CEN%7CPA%7CAll%7CIT%20Pro%7CCompute%7CNAMER%7CNAMER%7Cpsm_a134p000006peeSAAQ; s_cc=true; s_eVar60=psm_a134p000006peeSAAQ; s_fid=10D65790BD3E9662-0E495B7B175F9B10; sess-at-main="JYhh8gxiBslO/kqg9CLHKB+7ZINYTzfeMyPRXcV0brQ="; session-id=133-9013249-1407720; skin=noskin; sst-main=Sst1|PQFaGWu7J2h5IuNc2LZKdajtCRijIOMekV60ZkJVaTETGt9Loyl_4O82jLyfB5QYyq6TY-rSsBxVJhk3kuFn_9xsnDC0L9EQqP857UtdoSRpyqj4thl_5zBbMX1d6bHj6RRgin08pEXCVtTX0sKjTXXQAAdwxDUehWJ3zMYqvrbzfdgYUsSfaIi2z4JXly2KCTnJ2x7S1ZPsT01icJ9eaxXiYpplO4zC8oBX_mQgNk77Wk2QebA9cKgra0Su2ZSDjIReHc8QJKuf-gHtcJyFIX0I1kaHUdNRbmjhrTM2i5EVokQ; ubid-main=133-1834581-4094037; x-main="v8pymdSmc?mZyoO??ZV5X9VnBaWJ064XPW1uo4wPrlMJqOzapjWNf2wzacd?aXtC"; csd-key=eyJ3YXNtVGVzdGVkIjp0cnVlLCJ3YXNtQ29tcGF0aWJsZSI6dHJ1ZSwid2ViQ3J5cHRvVGVzdGVkIjpmYWxzZSwidiI6MSwia2lkIjoiMGQ3NmRiIiwia2V5IjoiaEFMdGhoWGdqcU5qRHd4U2wrZDYyY3M5ZCs0akZLWncyQWFuZzdaMG5yK2YvRGRZcldTTGczckFoMzVkVU5qU3pUQ0lzMzlJeU9IZCtnby9BRy8vdjFUKy9RdHRaUXJZMnk1cDVNbnA3SVJtcXRlNE1DQmFRRGRWS1NTOHFQYm9NUDNsd3BuQzJPZjJyZG1BMWVXMUZUNDNyZ1FSanRkK1VaemV4eEpjb3JwZll6bnJWbVhuNzJDSGRHUTdZVVl4TEJQMWQ5OFBHWk1BLzJHSzhiRUlZNlhyZm1hNHBRMzVta1dsS3BDMEp6ZUJqNDE2Y2hWY2ZVTHhsMkJhdHovZGlDeVE5TlIzZTFsVDhUY0ZuZUorSXF0dDFpMytFcjhaTTduWTBlSUw3aFJqUVErWjMvRkFPTUxrY2kvUDlIdlFxRzVRT0IrejJ3c29TR2hmMmVLY0tBPT0ifQ==; s_nr=1619097147581-New; s_vnum=2051097147582%26vn%3D1; s_dslv=1619097147582; s_sq=%5B%5BB%5D%5D; session-id-time=2082787201l; session-token="3voPf4tRNo/RYAK8fK1frf1aD7SEOMvaFee6HcJuBidLHz4qfoJhUjcL4x2729nwhN/50vHsCw3qyMPuAzLWufsYuNZ/ojYQdcsaBzMAYnWVBJ/hEi1GAVG6ygBVfhk2RtpENUYa3QdB0hSwVGifQ3x6wotRj1uPAokETI8kfzoJLR3S648BZ4M1wRbw3ppYnaDjp1e0t7R/PCUJXIGBDytpHjmShQWyQAuZgsR7TPo60VbTXUtQmdAzGrKaYwqE/p54YSP7Ntk5deWYIAbpmw=="; csm-hit=tb:XDS3FJT93JVQH5T22H65+b-G382SR5EN2TS8TJF7WJ6|1619107560227&t:1619107560227&adb:adblk_no',
+            'cookie': cookies,
         }
          
         
