@@ -1,20 +1,15 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium_stealth import stealth
-import undetected_chromedriver as uc
 import time
 import random
 import sys
 import subprocess
 import multiprocessing
 import re
+from lxml import html
 import requests
 import pickle
 
 # make sure this path is correct
-PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
+#PATH = 'C:\\Users\\desktop\\Documents\\bot\\chromedriver.exe'
 
 domains = ['smile.amazon.com', 'amazon.com']
 
@@ -54,30 +49,13 @@ asins = [
 ]
 
 def checkBB(proxy,event):
-
-       #options = webdriver.ChromeOptions()
-        options = uc.ChromeOptions()
-        options.headless=True
-        options.add_argument('--proxy-server=socks5://' + proxy)
-        options.add_argument('--ignore-certificate-errors')
-        options.add_argument("--headless")
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--log-level=3")
-        options.add_argument('--disable-gpu')
-        options.add_experimental_option('useAutomationExtension', False)
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        driver = uc.Chrome(options=options) 
-        driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'})
-        driver.set_page_load_timeout(10)
-        stealth(driver,
-                languages=["en-US", "en"],
-                vendor="Google Inc.",
-                platform="Win32",
-                webgl_vendor="Intel Inc.",
-                renderer="Intel Iris OpenGL Engine",
-                fix_hairline=True,
-                )
-        driver.get('https://www.amazon.com/gp/cart/view.html?ref_=nav_cart')
+    
+        s = requests.Session()
+        #p = proxy.split(':', 3)
+        s.proxy = {
+            'https': 'socks5://' + proxy,
+        }
+        r1 = s.get('https://www.amazon.com/gp/cart/view.html?ref_=nav_cart')
         while True:
             for domain in domains:
                 for i in asins:
@@ -87,21 +65,23 @@ def checkBB(proxy,event):
                         #multi_url = 'https://smile.amazon.com/gp/aws/cart/add.html?OfferListingId.1={}&Quantity.1=1&OfferListingId.2={}&Quantity.2=1&OfferListingId.3={}&Quantity.3=1&OfferListingId.4={}&Quantity.4=1&OfferListingId.5={}&Quantity.5=1&confirmPage=confirm'
                         url = f'https://{domain}/gp/aod/ajax/ref=aod_f_primeEligible?asin={asin}'
                         t0= time.perf_counter()
-                        driver.get(url)
+                        r2 = s.get(url)
                         t1 = time.perf_counter() - t0
                         #print(driver.page_source)
-                        print ('\r{:.2f} sec'.format(t1)) 
-                        name = driver.find_element_by_id('aod-asin-title-text').text
+                        print ('\r{:.2f} sec'.format(t1))
+                        tree = html.fromstring(r2.content) 
+                        name =  tree.xpath('//*[@id="aod-price-0"]/span/span[1]')
                         print(name)
                         
                         try:
                             offerid = driver.find_element_by_name("offeringID.1").get_attribute('value')
                             digits = driver.find_element_by_xpath("//span[contains(@class,'a-offscreen')]").text
                             aprice = digits.strip('$').replace(',','')
-                            if float(aprice) < price:
-                                print('Checking out ATM: ', asin)
-                                turboATC(asin,offerid)
-                                event.set()
+                            if offerid:
+                                if float(aprice) < price:
+                                    print('Checking out ATM: ', asin)
+                                    turboATC(asin,offerid)
+                                    event.set()
                                 
                         except Exception as e:
                             pass
