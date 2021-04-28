@@ -79,7 +79,7 @@ products = [
 
 
 
-            
+#step 1 of Checkout()            
 def addtocart(proxy,cartId,sku):
 
     cookies = {
@@ -92,7 +92,7 @@ def addtocart(proxy,cartId,sku):
     data = '{"id":"' + cartId + '","lineItems":[{"sku":"' + sku + '","quantity":1}]}'
     response = requests.post('', headers=headers, cookies=cookies, data=data, proxies=proxy)
 
-
+#step 2 of Checkout() 
 def order(s,token,proxy,email,name,offerid,sku,total,address):
     #order call
     headers = {
@@ -101,6 +101,7 @@ def order(s,token,proxy,email,name,offerid,sku,total,address):
     order_call = s.post('', headers=headers, data=data, proxies=proxy)
     print(order_call)
 
+#step 3 and final step of Checkout() 
 def submit(s,token,proxy,checkout,total):            
     #Submit call
     headers = {
@@ -117,6 +118,7 @@ def submit(s,token,proxy,checkout,total):
     print(submit_call.text)
     #resp = session.send(prepped, verify=False)
 
+# scraper condition is met, grab sku that met condition and proceed to checkout with session
 def checkout(sku):
     for i in profiles:
         for x in products:
@@ -146,7 +148,7 @@ def checkout(sku):
                 countdown(1) 
                 submit(s,token,proxy,checkout,total)
 
-
+# Scrape for multiple SKUs each X sec if quantity >=10 checkout with SKU
 def checkBB():
 
         #for prox in proxies:
