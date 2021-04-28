@@ -120,7 +120,7 @@ def submit(s,token,proxy,checkout,total):
 
 # scraper condition is met, grab sku that met condition and proceed to checkout with session
 def checkout(sku):
-    for i in profiles:
+    for i in profiles: #instead of for loop, async process checkout sequence per each profile
         for x in products:
             sku = sku
             user = (i['user'])
@@ -151,59 +151,60 @@ def checkout(sku):
 # Scrape for multiple SKUs each X sec if quantity >=10 checkout with SKU
 def checkBB():
 
-        #for prox in proxies:
-            prox = ''
-            proxy = { 'http': 'http://'+prox}
-            user_agent = random.choice(user_agent_list)
-            try:
-                #url = 'https://www.bestbuy.ca/ecomm-api/availability/products?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson&accept-language=en-CA&postalCode=E5S&skus=15084753|14953248|14954116|15166285|15078017|15229237'
-                headers = {
-                    'authority': 'www.bestbuy.ca',
-                    'upgrade-insecure-requests': '1',
-                    'user-agent': user_agent,
-                    'referer': 'https://www.bestbuy.ca/en-ca/',
-                    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-                    'sec-fetch-site': 'none',
-                    'sec-fetch-mode': 'navigate',
-                    'sec-fetch-user': '?1',
-                    'sec-fetch-dest': 'document',
-                    'accept-language': 'en-US,en;q=0.9',
-                }
+      # Send async requests with a set limit of concurrent threads or semaphores, set to 3. 
+      # If first thread find quantity and meet quantity > 10, kill all other threads, first thread will do checkout only.
+      prox = ''
+      proxy = { 'http': 'http://'+prox}
+      user_agent = random.choice(user_agent_list)
+      try:
+          #url = 'https://www.bestbuy.ca/ecomm-api/availability/products?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson&accept-language=en-CA&postalCode=E5S&skus=15084753|14953248|14954116|15166285|15078017|15229237'
+          headers = {
+              'authority': 'www.bestbuy.ca',
+              'upgrade-insecure-requests': '1',
+              'user-agent': user_agent,
+              'referer': 'https://www.bestbuy.ca/en-ca/',
+              'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+              'sec-fetch-site': 'none',
+              'sec-fetch-mode': 'navigate',
+              'sec-fetch-user': '?1',
+              'sec-fetch-dest': 'document',
+              'accept-language': 'en-US,en;q=0.9',
+          }
 
-                params = (
-                    ('accept', 'application/vnd.bestbuy.standardproduct.v1+json'),
-                    ('accept-language', 'en-CA'),
-                    ('skus', '15166285|15078017|15084753|14953248|15229237'),
-                )
+          params = (
+              ('accept', 'application/vnd.bestbuy.standardproduct.v1+json'),
+              ('accept-language', 'en-CA'),
+              ('skus', '15166285|15078017|15084753|14953248|15229237'),
+          )
 
-                response = requests.get('https://www.bestbuy.ca/ecomm-api/availability/products', headers=headers, params=params, proxies=proxy, timeout=5)
-                response.raise_for_status()
-                decoded_data = response.content.decode('utf-8-sig')
+          response = requests.get('https://www.bestbuy.ca/ecomm-api/availability/products', headers=headers, params=params, proxies=proxy, timeout=5)
+          response.raise_for_status()
+          decoded_data = response.content.decode('utf-8-sig')
 
-                match = json.loads(decoded_data)
-                print(response.elapsed.total_seconds())
-                for i in range(5):
-                    status = str(match['availabilities'][i]['shipping']['status'])
-                    quantity = float(match['availabilities'][i]['shipping']['quantityRemaining'])
-                    sku = str(match['availabilities'][i]['sku'])
-                    print(status, quantity, sku)
-                    if status != 'InStock' and sku != '14969729' and status == 'SoldOutOnline':
-                          #notify() #send alert
-                          continue
-                    if quantity >= 10:
-                          #addtocart(sku)    
-                          checkout(sku) # add to cart + checkout, only 1 task can call checkout(sku)
-                          break    
-                #countdown(5)    
+          match = json.loads(decoded_data)
+          print(response.elapsed.total_seconds())
+          for i in range(5):
+              status = str(match['availabilities'][i]['shipping']['status'])
+              quantity = float(match['availabilities'][i]['shipping']['quantityRemaining'])
+              sku = str(match['availabilities'][i]['sku'])
+              print(status, quantity, sku)
+              if status != 'InStock' and sku != '14969729' and status == 'SoldOutOnline':
+                    #notify() #send alert
+                    continue
+              if quantity >= 10:
+                    #addtocart(sku)    
+                    checkout(sku) # add to cart + checkout, only 1 task can call checkout(sku)
+                    break    
+          #countdown(5)    
 
-            except requests.exceptions.RequestException as err:
-                print ("Oops: Something Else",err)
-            except requests.exceptions.HTTPError as errh:
-                print ("Http Error:",errh)
-            except requests.exceptions.ConnectionError as errc:
-                print ("Error Connecting:",errc)
-            except requests.exceptions.Timeout as errt:
-                print ("Timeout Error:",errt)    
+      except requests.exceptions.RequestException as err:
+          print ("Oops: Something Else",err)
+      except requests.exceptions.HTTPError as errh:
+          print ("Http Error:",errh)
+      except requests.exceptions.ConnectionError as errc:
+          print ("Error Connecting:",errc)
+      except requests.exceptions.Timeout as errt:
+          print ("Timeout Error:",errt)    
 
 
 def countdown(t):
