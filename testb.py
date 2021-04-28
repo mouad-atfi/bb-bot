@@ -14,26 +14,27 @@ user_agent_list = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0",
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.72 Safari/537.36"]
 
+# 25 proxy IPs
 proxies = []
 with open('./socks.txt') as f:
         proxies = f.read().splitlines()
 
 profiles = [
     {
-         'user': 'mouadatfi',
-         'email': 'mouad.atfi@gmail.com',
-         'address': '{"address":"214-19138 26 Ave, Suite N327198","apartmentNumber":"","city":"Surrey","country":"CA","firstName":"Mouad","lastName":"Atfi","phones":[{"ext":"","phone":"4388660094"}],"postalCode":"V3Z 3V7","province":"BC"',
-         'submit': '{"cvv":"349","email":"mouad.atfi@gmail.com","id":"e3820a63-43aa-4dba-a782-fc23656d7d5f","totalPurchasePrice":', 
-         'cartId': 'e3820a63-43aa-4dba-a782-fc23656d7d5f', 
-         'proxy': '138.197.132.33:8388'
+         'user': 'user',
+         'email': '', 
+         'address': '',
+         'submit': '', 
+         'cartId': '', 
+         'proxy': ''
     }, 
     {
-         'user': 'meriemcharaf',
-         'email': 'soloqxss@gmail.com', 
-         'address': '{"address":"214-19138 26 Ave, Suite N330440","apartmentNumber":"","city":"Surrey","country":"CA","firstName":"Meriem","lastName":"Charaf","phones":[{"ext":"","phone":"5148174913"}],"postalCode":"V3Z 3V7","province":"BC"',
-         'submit': '{"cvv":"617","email":"soloqxss@gmail.com","id":"2d96fc2d-5694-484e-8c7c-aece9d663371","totalPurchasePrice":', 
-         'cartId': '2d96fc2d-5694-484e-8c7c-aece9d663371', 
-         'proxy': '134.122.34.159:8388'
+         'user': 'user',
+         'email': '', 
+         'address': '',
+         'submit': '', 
+         'cartId': '', 
+         'proxy': ''
     }  
 ]
 
@@ -82,71 +83,28 @@ products = [
 def addtocart(proxy,cartId,sku):
 
     cookies = {
-      'enabled': '1',
-      'ReturnUrl': 'https://www.bestbuy.ca/',
-      'surveyOptOut': '1',
-      'CS_Culture': 'en-CA',
-      'cartId': cartId,
     }
 
     headers = {
       'authority': 'www.bestbuy.ca',
-      'region-code': 'BC',
-      'content-type': 'application/json',
-      'postal-code': 'V3Z',
-      'accept-language': 'en-CA',
-      'sec-ch-ua-mobile': '?0',
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36',
-      'sec-ch-ua': '"Chromium";v="88", "Google Chrome";v="88", ";Not A Brand";v="99"',
-      'accept': '*/*',
-      'origin': 'https://www.bestbuy.ca',
-      'sec-fetch-site': 'same-origin',
-      'sec-fetch-mode': 'cors',
-      'sec-fetch-dest': 'empty',
-      'referer': 'https://www.bestbuy.ca/en-ca/product/' + sku,
     }
 
     data = '{"id":"' + cartId + '","lineItems":[{"sku":"' + sku + '","quantity":1}]}'
-    response = requests.post('https://www.bestbuy.ca/api/basket/v2/baskets', headers=headers, cookies=cookies, data=data, proxies=proxy)
+    response = requests.post('', headers=headers, cookies=cookies, data=data, proxies=proxy)
 
 
 def order(s,token,proxy,email,name,offerid,sku,total,address):
     #order call
     headers = {
-    'authority': 'www.bestbuy.ca',
-    'sec-ch-ua': '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
-    'x-tx': token,
-    'accept-language': 'en-ca',
-    'sec-ch-ua-mobile': '?0',
-    'content-type': 'application/json',
-    'accept': 'application/vnd.bestbuy.checkout+json',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36',
-    'origin': 'https://www.bestbuy.ca',
-    'sec-fetch-site': 'same-origin',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-dest': 'empty',
-    'referer': 'https://www.bestbuy.ca/checkout/?qit=1',
     }
-    data = f'{{"email":"{email}","lineItems":[{{"lineItemType":"Product","name":"{name}","offerId":"{offerid}","quantity":1,"sellerId":"bbyca","sku":"{sku}","total":{total}}}],"shippingAddress":{address}}}}}'
-    order_call = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders', headers=headers, data=data, proxies=proxy)
+    data = ''
+    order_call = s.post('', headers=headers, data=data, proxies=proxy)
     print(order_call)
 
 def submit(s,token,proxy,checkout,total):            
     #Submit call
     headers = {
     'authority': 'www.bestbuy.ca',
-    'sec-ch-ua': '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
-    'x-tx': token,
-    'accept-language': 'en-ca',
-    'sec-ch-ua-mobile': '?0',
-    'content-type': 'application/json',
-    'accept': 'application/vnd.bestbuy.checkout+json',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36',
-    'origin': 'https://www.bestbuy.ca',
-    'sec-fetch-site': 'same-origin',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-dest': 'empty',
-    'referer': 'https://www.bestbuy.ca/checkout/?qit=1',
     }
     a = total
     p = 0.05
@@ -155,7 +113,7 @@ def submit(s,token,proxy,checkout,total):
     price = round((f + (f*p) +(f*g)), 2)
 
     data = f'{checkout}{price}}}'
-    submit_call = s.post('https://www.bestbuy.ca/api/checkout/checkout/orders/submit', headers=headers, data=data, proxies=proxy)
+    submit_call = s.post('', headers=headers, data=data, proxies=proxy)
     print(submit_call.text)
     #resp = session.send(prepped, verify=False)
 
@@ -191,8 +149,9 @@ def checkout(sku):
 
 def checkBB():
 
-        for prox in proxies:
-            proxy = { 'https': 'socks5://'+prox}
+        #for prox in proxies:
+            prox = ''
+            proxy = { 'http': 'http://'+prox}
             user_agent = random.choice(user_agent_list)
             try:
                 #url = 'https://www.bestbuy.ca/ecomm-api/availability/products?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson&accept-language=en-CA&postalCode=E5S&skus=15084753|14953248|14954116|15166285|15078017|15229237'
@@ -200,7 +159,7 @@ def checkBB():
                     'authority': 'www.bestbuy.ca',
                     'upgrade-insecure-requests': '1',
                     'user-agent': user_agent,
-                    'referer': 'https://www.bestbuy.ca/en-ca/product/msi-nvidia-geforce-rtx-3060-ti-ventus-2x-oc-8gb-gddr6-video-card/15178453',
+                    'referer': 'https://www.bestbuy.ca/en-ca/',
                     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
                     'sec-fetch-site': 'none',
                     'sec-fetch-mode': 'navigate',
@@ -226,15 +185,14 @@ def checkBB():
                     quantity = float(match['availabilities'][i]['shipping']['quantityRemaining'])
                     sku = str(match['availabilities'][i]['sku'])
                     print(status, quantity, sku)
-                    #if status != 'InStock' and sku != '14969729' and status == 'SoldOutOnline':
-                          #print('refresh cookies')
-                          #cookies.main()
-                          #continue
+                    if status != 'InStock' and sku != '14969729' and status == 'SoldOutOnline':
+                          #notify() #send alert
+                          continue
                     if quantity >= 10:
                           #addtocart(sku)    
-                          checkout(sku)
+                          checkout(sku) # add to cart + checkout, only 1 task can call checkout(sku)
                           break    
-                #countdown(3)    
+                #countdown(5)    
 
             except requests.exceptions.RequestException as err:
                 print ("Oops: Something Else",err)
@@ -256,8 +214,8 @@ def countdown(t):
 def main():
 
     while True:
-        cookies.main()
-        checkBB()
+        cookies.main() #launch selenium, login, create cookie session, close selenium
+        checkBB() #scan page for quantity > 10
 
 
 if __name__ == "__main__":
