@@ -254,9 +254,9 @@ def countdown(t):
         time.sleep(1)
 
 def main():
-
+    cookies.main()
     while True:
-        cookies.main()
+        #cookies.main()
         checkBB()
 
 
